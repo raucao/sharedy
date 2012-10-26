@@ -1,0 +1,41 @@
+@import "compass_twitter_bootstrap";
+
+html {
+  height: 100%;
+}
+
+body {
+  background: repeating-linear-gradient(0deg, #F8F6F5, #F6F4F2 50%, #FCFBF9);
+  background: -webkit-repeating-linear-gradient(0deg, #F5F4F3, #FAF9F8 50%, #F5F4F3);
+  background-size: 5px 5px;
+  height: 100%;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+#container {
+
+  p.hint {
+    margin: 20px 20px 0 20px;
+  }
+
+}
+
+#dropzone {
+  display: block;
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:0;
+  left:0;
+  right:0;
+  margin: 100px 20px 20px 20px;
+  background-color: #fff;
+}
+
+// #dropzone {
+//   // height: 80%;
+//   background: #fff;
+// }
