@@ -1,10 +1,11 @@
 $(function() {
 
+  remoteStorage.claimAccess({sharedy: 'rw'});
+  remoteStorage.displayWidget('remotestorage-connect');
+
   jQuery.event.props.push('dataTransfer');
 
-  var maxFiles = 5;
-  var errMessage = 0;
-  var dataArray = [];
+  var imageFiles = [];
 
   $('#dropzone').bind('dragenter', function() {
     $("p.placeholder").hide();
@@ -46,39 +47,31 @@ $(function() {
         return;
       }
 
-      var fileReader = new FileReader();
+      var fileReaderBase64 = new FileReader();
+      var fileReaderBinary = new FileReader();
 
-      fileReader.onload = (function(file) {
-
+      fileReaderBase64.onload = (function(file) {
         return function(e) {
-          dataArray.push({name: file.name, value: this.result});
-
-          var image = this.result;
-
-          $('#dropped-files').append('<img src='+image+'>');
+          $('#dropped-files').append('<img src='+this.result+'>');
         };
-
       })(files[index]);
 
-      fileReader.readAsDataURL(file);
+      fileReaderBinary.onload = (function(file) {
+        blob = new Blob([this.result], {type: file.type})
+        return function(e) {
+          imageFiles.push({name: file.name, type: file.type, data: blob});
+        };
+      })(files[index]);
+
+      fileReaderBase64.readAsDataURL(file);
+      fileReaderBinary.readAsBinaryString(file);
     });
   });
 
 
   function validateFileType(fileType) {
     if (!fileType.match('image.*')) {
-      if (errMessage == 0) {
-        alert('Hey! Images only');
-        ++errMessage
-      }
-      else if (errMessage == 1) {
-        alert('Stop it! Images only!');
-        ++errMessage
-      }
-      else if (errMessage == 2) {
-        alert("Fine! Keep dropping non-images.");
-        errMessage = 0;
-      }
+      alert('Hey! Images only');
       $("p.placeholder").show();
       return false;
     }
@@ -88,21 +81,38 @@ $(function() {
   }
 
   function cancelSharing() {
-    // $('#loading-bar .loading-color').css({'width' : '0%'});
-    // $('#loading').css({'display' : 'none'});
-    // $('#loading-content').html(' ');
-
     $('#upload').hide();
     $('#dropzone').show();
     $("p.placeholder").show();
     $('#dropped-files > img').remove();
 
-    dataArray.length = 0;
+    imageFiles = [];
 
     return false;
   }
 
-
   $("#upload button.cancel").on("click", cancelSharing);
+  $("#upload button.upload").on("click", uploadImages);
+
+  function uploadImages() {
+    $.each(imageFiles, function(index, file){
+      remoteStorage.sharedy.storeImage(
+        file.type,
+        file.name,
+        file.data,
+        function(){
+          console.log(remoteStorage.sharedy.getImageUrl(file.name));
+      });
+    });
+  }
+
+  function dataURItoBlob(dataURI, mimeType) {
+    var binary = atob(dataURI.split(',')[1]);
+    var array = [];
+    for(var i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {type: mimeType});
+  }
 
 });
