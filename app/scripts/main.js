@@ -8,7 +8,7 @@ $(function() {
   var z = -40
 
   $('#dropzone').bind('dragenter', function() {
-    console.log('Entered the dropzone')
+    $("p.placeholder").hide();
     $(this).css({'border': '3px dashed red'});
     return false;
   });
@@ -18,20 +18,14 @@ $(function() {
     return false;
   });
 
-
   $('#dropzone').bind('dragleave', function() {
-    console.log('Entered the dropzone')
-    $(this).css({'border': 'none'});
-    return false;
-  });
-
-  $('#dropzone').bind('drop', function() {
-    console.log('Dropped something')
+    $("p.placeholder").show();
     $(this).css({'border': 'none'});
     return false;
   });
 
   $('#dropzone').bind('drop', function(e) {
+    $(this).css({'border': 'none'});
 
     e.preventDefault();
     if (e.stopPropagation) {
@@ -73,15 +67,15 @@ $(function() {
   function validateFileType(fileType) {
     if (!fileType.match('image.*')) {
       if (errMessage == 0) {
-        $('p.placeholder').html('Hey! Images only');
+        alert('Hey! Images only');
         ++errMessage
       }
       else if (errMessage == 1) {
-        $('p.placeholder').html('Stop it! Images only!');
+        alert('Stop it! Images only!');
         ++errMessage
       }
       else if (errMessage == 2) {
-        $('p.placeholder').html("Fine! Keep dropping non-images.");
+        alert("Fine! Keep dropping non-images.");
         errMessage = 0;
       }
       return false;
