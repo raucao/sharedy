@@ -53,9 +53,7 @@ $(function() {
 
           var image = this.result;
 
-          $('#dropped-files').append(
-            '<div class="image" style="background: url('+image+'); background-size: cover;"></div>'
-          );
+          $('#dropped-files').append('<img src='+image+'>');
         };
 
       })(files[index]);
@@ -92,7 +90,7 @@ $(function() {
     $('#upload').hide();
     $('#dropzone').show();
     $("p.placeholder").show();
-    $('#dropped-files > .image').remove();
+    $('#dropped-files > img').remove();
 
     dataArray.length = 0;
 
