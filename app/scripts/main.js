@@ -78,6 +78,7 @@ $(function() {
         alert("Fine! Keep dropping non-images.");
         errMessage = 0;
       }
+      $("p.placeholder").show();
       return false;
     }
   }
