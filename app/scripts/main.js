@@ -5,7 +5,6 @@ $(function() {
   var maxFiles = 5;
   var errMessage = 0;
   var dataArray = [];
-  var z = -40
 
   $('#dropzone').bind('dragenter', function() {
     $("p.placeholder").hide();
@@ -26,6 +25,8 @@ $(function() {
 
   $('#dropzone').bind('drop', function(e) {
     $(this).css({'border': 'none'});
+    $("#dropzone").hide();
+    $("#dropped-files").show();
 
     e.preventDefault();
     if (e.stopPropagation) {
@@ -50,11 +51,11 @@ $(function() {
         return function(e) {
           dataArray.push({name: file.name, value: this.result});
 
-          z = z+40;
-
           var image = this.result;
 
-          $('#dropped-files').append('<div class="image" style="left: '+z+'px; background: url('+image+'); background-size: cover;"> </div>');
+          $('#dropped-files').append(
+            '<div class="image" style="background: url('+image+'); background-size: cover;"></div>'
+          );
         };
 
       })(files[index]);
@@ -93,7 +94,6 @@ $(function() {
     // $('#uploaded-holder').hide();
 
     dataArray.length = 0;
-    z = -40;
 
     return false;
   }
