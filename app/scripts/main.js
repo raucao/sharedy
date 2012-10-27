@@ -42,7 +42,9 @@ $(function() {
 
     $.each(files, function(index, file) {
 
-      validateFileType(files[index].type);
+      if (!validateFileType(files[index].type)) {
+        return;
+      }
 
       var fileReader = new FileReader();
 
@@ -79,6 +81,9 @@ $(function() {
       }
       $("p.placeholder").show();
       return false;
+    }
+    else {
+      return true;
     }
   }
 
