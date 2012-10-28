@@ -2,6 +2,7 @@ $(function() {
 
   remoteStorage.claimAccess({sharedy: 'rw'});
   remoteStorage.displayWidget('remotestorage-connect');
+  // remoteStorage.onWidget('state', function(state) {})
 
   jQuery.event.props.push('dataTransfer');
 
@@ -52,19 +53,12 @@ $(function() {
 
       fileReaderBase64.onload = (function(file) {
         return function(e) {
+          imageFiles.push({name: file.name, type: file.type, data: this.result});
           $('#dropped-files').append('<img src='+this.result+'>');
         };
       })(files[index]);
 
-      fileReaderBinary.onload = (function(file) {
-        blob = new Blob([this.result], {type: file.type})
-        return function(e) {
-          imageFiles.push({name: file.name, type: file.type, data: blob});
-        };
-      })(files[index]);
-
       fileReaderBase64.readAsDataURL(file);
-      fileReaderBinary.readAsBinaryString(file);
     });
   });
 
@@ -96,10 +90,12 @@ $(function() {
 
   function uploadImages() {
     $.each(imageFiles, function(index, file){
+      blob = dataURItoBlob(file.data, file.type);
+
       remoteStorage.sharedy.storeImage(
         file.type,
         file.name,
-        file.data,
+        blob,
         function(){
           console.log(remoteStorage.sharedy.getImageUrl(file.name));
       });
