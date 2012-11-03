@@ -16,6 +16,10 @@ body {
   .navbar-inner {
     @include border-radius(0);
   }
+
+  .brand .beta {
+    color: #999;
+  }
 }
 
 #container {
