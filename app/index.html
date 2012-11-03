@@ -22,7 +22,9 @@
       <a class="brand" href="#">Sharedy <span class="beta">&beta;</span></a>
       <ul class="nav">
         <li class="active"><a href="#">Share</a></li>
-        <li><a href="#">History</a></li>
+        <li data-nav-item="history">
+          <a href="#" rel="tooltip" data-placement="bottom" title="coming soon">History</a>
+        </li>
       </ul>
     </div>
   </nav>
@@ -30,7 +32,7 @@
   <div id="container">
     <p class="hint">Quickly share an image with the world:</p>
     <div id="dropzone">
-      <p class="placeholder">[ drop image file here ]</p>
+      <p class="placeholder">[ drop image files here ]</p>
     </div>
     <div id="upload">
       <div id="dropped-files"></div>
@@ -62,7 +64,7 @@
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-affix.js"></script> -->
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-alert.js"></script> -->
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-dropdown.js"></script> -->
-  <!-- <script src="scripts/vendor/bootstrap/bootstrap-tooltip.js"></script> -->
+  <script src="scripts/vendor/bootstrap/bootstrap-tooltip.js"></script>
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-modal.js"></script> -->
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-transition.js"></script> -->
   <!-- <script src="scripts/vendor/bootstrap/bootstrap-button.js"></script> -->
