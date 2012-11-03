@@ -1,8 +1,29 @@
 $(function() {
 
+  //
+  // remoteStorage
+  //
+
   remoteStorage.claimAccess({sharedy: 'rw'});
   remoteStorage.displayWidget('remotestorage-connect');
-  // remoteStorage.onWidget('state', function(state) {})
+
+  remoteStorage.onWidget("state", function(state){
+    switch (state) {
+      case "anonymous":
+        $("#app-overlay").show();
+        break;
+      case "typing":
+        $("#app-overlay .hint").hide();
+        break;
+      case "connected":
+        $("#app-overlay").hide();
+        break;
+    }
+  });
+
+  //
+  // App
+  //
 
   jQuery.event.props.push('dataTransfer');
 
@@ -27,6 +48,12 @@ $(function() {
 
   $('#dropzone').bind('drop', function(e) {
     $(this).removeClass('active');
+
+    if (remoteStorage.getWidgetState() != "connected") {
+      $("#app-overlay").show();
+      return false;
+    }
+
     $("#dropzone").hide();
     $("#upload").show();
 
@@ -35,12 +62,7 @@ $(function() {
       e.stopPropagation();
     }
 
-    // e.dataTransfer.dropEffect = 'copy';
-
     var files = e.dataTransfer.files;
-
-    // Show the upload holder
-    // $('#uploaded-holder').show();
 
     $.each(files, function(index, file) {
       if (!validateFileType(files[index].type)) {
@@ -146,9 +168,5 @@ $(function() {
   function imageElement(filename) {
     return $(".image[data-filename='"+window.btoa(filename)+"']");
   }
-
-  // $("input[name='direct-url']").on("click", function(){
-  //   $(this).select();
-  // });
 
 });

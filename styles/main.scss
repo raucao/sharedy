@@ -28,6 +28,37 @@ body {
   }
 }
 
+#app-overlay {
+  display: none;
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:40px;
+  left:0;
+  right:0;
+  background-color: rgba(255,255,255,0.8);
+  border: none;
+  z-index: 232323;
+
+  .hint {
+    position: absolute;
+    top: 30px;
+    right: 150px;
+    background: url('/images/arrow.svg') right top no-repeat;
+    min-height: 100px;
+    width: 560px;
+    padding-top: 60px;
+
+    p {
+      width: 400px;
+      font-family: 'Annie Use Your Telescope', cursive;
+      font-size: 30px;
+      line-height: 1.3em;
+      color: #BE1E2D;
+    }
+  }
+}
+
 #dropzone {
   display: block;
   position:absolute;
