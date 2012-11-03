@@ -86,6 +86,8 @@ $(function() {
     $('#dropzone').show();
     $("p.placeholder").show();
     $('#dropped-files > div.image').remove();
+    $("#upload button.upload").removeAttr('disabled').show();
+    $("#upload button.cancel").html('cancel');
 
     imageFiles = [];
 
@@ -109,7 +111,7 @@ $(function() {
           // success
           removeUploadIndicator(imgEl);
           showImageUrl(imgEl, remoteStorage.sharedy.getImageUrl(filename));
-          $("#upload button.upload").remove();
+          $("#upload button.upload").hide();
           // failure
           // $("#upload button.upload").removeAttr('disabled');
         }
