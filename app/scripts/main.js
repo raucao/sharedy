@@ -98,15 +98,17 @@ $(function() {
   function uploadImages() {
     $.each(imageFiles, function(index, file){
       var imgEl = imageElement(file.name)
+      timestamp = moment().format("-YYMMDD-HHmmss");
+      filename  = file.name + timestamp;
 
       remoteStorage.sharedy.storeImage(
         file.type,
-        file.name,
+        filename,
         file.data,
         function(){
           // success
           removeUploadIndicator(imgEl);
-          showImageUrl(imgEl, remoteStorage.sharedy.getImageUrl(file.name));
+          showImageUrl(imgEl, remoteStorage.sharedy.getImageUrl(filename));
           $("#upload button.upload").remove();
           // failure
           // $("#upload button.upload").removeAttr('disabled');
