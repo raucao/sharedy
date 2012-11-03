@@ -43,7 +43,6 @@ $(function() {
     // $('#uploaded-holder').show();
 
     $.each(files, function(index, file) {
-
       if (!validateFileType(files[index].type)) {
         return;
       }
@@ -53,7 +52,9 @@ $(function() {
 
       fileReaderBase64.onload = (function(file) {
         return function(e) {
-          $('#dropped-files').append('<img src='+this.result+'>');
+          var html = '<div class="image" data-filename='+window.btoa(file.name)+'>';
+              html += '<img src='+this.result+'></div>';
+          $('#dropped-files').append(html);
         };
       })(files[index]);
 
@@ -84,7 +85,7 @@ $(function() {
     $('#upload').hide();
     $('#dropzone').show();
     $("p.placeholder").show();
-    $('#dropped-files > img').remove();
+    $('#dropped-files > div.image').remove();
 
     imageFiles = [];
 
@@ -96,14 +97,50 @@ $(function() {
 
   function uploadImages() {
     $.each(imageFiles, function(index, file){
+      var imgEl = imageElement(file.name)
+
       remoteStorage.sharedy.storeImage(
         file.type,
         file.name,
         file.data,
         function(){
-          console.log(remoteStorage.sharedy.getImageUrl(file.name));
-      });
+          // success
+          removeUploadIndicator(imgEl);
+          showImageUrl(imgEl, remoteStorage.sharedy.getImageUrl(file.name));
+          $("#upload button.upload").remove();
+          // failure
+          // $("#upload button.upload").removeAttr('disabled');
+        }
+      );
+
+      showUploadIndicator(imgEl);
+      $("#upload button.upload").attr('disabled', 'disabled');
+      $("#upload button.cancel").html('Back');
     });
+  }
+
+  function showUploadIndicator(element) {
+    var html = '<div class="overlay loading"></div>';
+    $(element).append($(html));
+    $(element).find('.overlay.loading').spin('large', 'white');
+  }
+
+  function removeUploadIndicator(element) {
+    $(element).find('.overlay.loading').remove();
+  }
+
+  function showImageUrl(element, url) {
+    var html = '\
+      <div class="overlay result">\
+        <label for="direct-url">Image URL:</label>\
+        <input type="text" name="direct-url" value="'+url+'">\
+      </div>';
+
+    $(element).append($(html));
+  }
+
+  function imageElement(filename) {
+    return $(".image[data-filename='"+window.btoa(filename)+"']");
   }
 
 });
