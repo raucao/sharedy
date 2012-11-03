@@ -98,8 +98,8 @@ $(function() {
   function uploadImages() {
     $.each(imageFiles, function(index, file){
       var imgEl = imageElement(file.name)
-      var timestamp = moment().format("-YYMMDD-HHmmss");
-      var filename  = file.name + timestamp;
+      var timestamp = moment().format("YYMMDD-HHmmss-");
+      var filename  = timestamp + file.name;
 
       remoteStorage.sharedy.storeImage(
         file.type,
