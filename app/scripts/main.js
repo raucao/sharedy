@@ -135,7 +135,7 @@ $(function() {
     var html = '\
       <div class="overlay result">\
         <label for="direct-url">Image URL:</label>\
-        <input type="text" name="direct-url" value="'+url+'">\
+        <input type="text" name="direct-url" value="'+url+'" onclick="this.select()">\
       </div>';
 
     $(element).append($(html));
@@ -144,5 +144,9 @@ $(function() {
   function imageElement(filename) {
     return $(".image[data-filename='"+window.btoa(filename)+"']");
   }
+
+  // $("input[name='direct-url']").on("click", function(){
+  //   $(this).select();
+  // });
 
 });
