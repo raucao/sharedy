@@ -43,7 +43,7 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
       // },
 
       storeImage: function(mimeType, fileName, data, callback) {
-        return publicClient.storeDocument(
+        return publicClient.storeFile(
           mimeType,
           "images/" + encodeURIComponent(fileName),
           data,

@@ -53,12 +53,18 @@ $(function() {
 
       fileReaderBase64.onload = (function(file) {
         return function(e) {
-          imageFiles.push({name: file.name, type: file.type, data: this.result});
           $('#dropped-files').append('<img src='+this.result+'>');
         };
       })(files[index]);
 
+      fileReaderBinary.onload = (function(file) {
+        return function(e) {
+          imageFiles.push({name: file.name, type: file.type, data: this.result});
+        };
+      })(files[index]);
+
       fileReaderBase64.readAsDataURL(file);
+      fileReaderBinary.readAsArrayBuffer(file);
     });
   });
 
@@ -90,25 +96,14 @@ $(function() {
 
   function uploadImages() {
     $.each(imageFiles, function(index, file){
-      blob = dataURItoBlob(file.data, file.type);
-
       remoteStorage.sharedy.storeImage(
         file.type,
         file.name,
-        blob,
+        file.data,
         function(){
           console.log(remoteStorage.sharedy.getImageUrl(file.name));
       });
     });
-  }
-
-  function dataURItoBlob(dataURI, mimeType) {
-    var binary = atob(dataURI.split(',')[1]);
-    var array = [];
-    for(var i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {type: mimeType});
   }
 
 });
