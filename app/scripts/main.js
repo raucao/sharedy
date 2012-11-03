@@ -10,7 +10,7 @@ $(function() {
 
   $('#dropzone').bind('dragenter', function() {
     $("p.placeholder").hide();
-    $(this).css({'border': '3px dashed red'});
+    $(this).addClass('active');
     return false;
   });
 
@@ -21,12 +21,12 @@ $(function() {
 
   $('#dropzone').bind('dragleave', function() {
     $("p.placeholder").show();
-    $(this).css({'border': 'none'});
+    $(this).removeClass('active');
     return false;
   });
 
   $('#dropzone').bind('drop', function(e) {
-    $(this).css({'border': 'none'});
+    $(this).removeClass('active');
     $("#dropzone").hide();
     $("#upload").show();
 
