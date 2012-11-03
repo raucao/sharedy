@@ -41,8 +41,10 @@ body {
     line-height: 60px;
     color: #eee;
     text-align: center;
-    width: 60%;
-    margin: 15% auto 0 auto;
+    width: 100%;
+    margin: -40px auto 0 auto;
+    top: 50%;
+    position: absolute;
   }
 }
 
