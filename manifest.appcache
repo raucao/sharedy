@@ -1,6 +1,6 @@
 CACHE MANIFEST
 
-# Time: Sat Nov 03 2012 22:50:09 GMT+0000 (GMT)
+# Time: Sat Nov 03 2012 23:08:47 GMT+0000 (GMT)
 # This manifest was created by confess.js, http://github.com/jamesgpearce/confess
 #
 # Retrieved URL: http://localhost:3501/
@@ -26,9 +26,9 @@ http://fonts.googleapis.com/css?family=Annie+Use+Your+Telescope
 http://localhost:3501/app/images/glyphicons-halflings-white.png?1351293506
 http://localhost:3501/app/images/glyphicons-halflings.png?1351293506
 http://localhost:3501/images/045ff673.arrow.svg
-scripts/4f5e04a5.main.js
 scripts/8ab52a5b.plugins.js
 scripts/d3681a19.remoteStorage-sharedy.js
+scripts/fed894c1.main.js
 scripts/vendor/32d93152.remoteStorage.js
 scripts/vendor/563889cf.spin.min.js
 scripts/vendor/cf69c6f2.modernizr.min.js

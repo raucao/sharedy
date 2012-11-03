@@ -169,4 +169,10 @@ $(function() {
     return $(".image[data-filename='"+window.btoa(filename)+"']");
   }
 
+  //
+  // Misc
+  //
+
+  $("[data-nav-item='history'] a").tooltip();
+
 });
