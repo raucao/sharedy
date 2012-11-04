@@ -1,0 +1,167 @@
+@import "compass_twitter_bootstrap";
+
+html {
+  height: 100%;
+}
+
+body {
+  background: repeating-linear-gradient(0deg, #F8F6F5, #F6F4F2 50%, #FCFBF9);
+  background: -webkit-repeating-linear-gradient(0deg, #F5F4F3, #FAF9F8 50%, #F5F4F3);
+  background-size: 5px 5px;
+  height: 100%;
+}
+
+.navbar {
+  margin-bottom: 0;
+  .navbar-inner {
+    @include border-radius(0);
+  }
+
+  .brand .beta {
+    color: #999;
+  }
+}
+
+#container {
+  p.hint {
+    margin: 20px 20px 0 20px;
+  }
+}
+
+#app-overlay {
+  display: none;
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:40px;
+  left:0;
+  right:0;
+  background-color: rgba(255,255,255,0.8);
+  border: none;
+  z-index: 232323;
+
+  .hint {
+    position: absolute;
+    top: 30px;
+    right: 150px;
+    background: url('/images/arrow.svg') right top no-repeat;
+    min-height: 100px;
+    width: 560px;
+    padding-top: 60px;
+
+    p {
+      width: 400px;
+      font-family: 'Annie Use Your Telescope', cursive;
+      font-size: 30px;
+      line-height: 1.3em;
+      color: #BE1E2D;
+    }
+  }
+}
+
+#dropzone {
+  display: block;
+  position:absolute;
+  height:auto;
+  bottom:0;
+  top:0;
+  left:0;
+  right:0;
+  margin: 100px 20px 20px 20px;
+  background-color: #fff;
+  border: none;
+  @include box-shadow(rgba(0, 0, 0, 0.15) 0 1px 3px inset);
+
+  &.active {
+    border: 3px dashed red;
+  }
+
+  p.placeholder {
+    font-size: 50px;
+    line-height: 60px;
+    color: #eee;
+    text-align: center;
+    width: 100%;
+    margin: -40px auto 0 auto;
+    top: 50%;
+    position: absolute;
+  }
+
+  input#file-picker {
+    background: #efefef;
+    position:absolute;
+    height:auto;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    @include opacity(0);
+  }
+}
+
+#upload {
+  display: none;
+  padding: 20px;
+  text-align: center;
+
+  #dropped-files {
+    @include clearfix;
+    padding-bottom: 10px;
+
+    div.image {
+      margin: 0 20px 20px 0;
+      display: inline-block;
+      position: relative;
+
+      div.overlay {
+        position: absolute;
+        background-color: rgba(51, 51, 51, 0.8);
+        display: block;
+        @include border-radius(4px);
+        // @include single-transition(opacity, 0.3, linear, 0);
+
+        &.loading {
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        &.result {
+          top: 50%;
+          left: 20px;
+          right: 20px;
+          margin-top: -50px;
+          padding: 10px 15px 15px 15px;
+          text-align: left;
+
+          label {
+            box-sizing: border-box;
+            width: 90%;
+            color: #aaa;
+            margin: 0 0 10px 0;
+          }
+
+          input[type=text] {
+            box-sizing: border-box;
+            height: 28px;
+            width: 100%;
+            margin: 0;
+          }
+        }
+      }
+    }
+
+    img {
+      max-height: 350px;
+      border: 4px solid #fff;
+      background: #fff;
+      @include box-shadow(0px 0px 10px rgba(0,0,0,0.1));
+      @include border-radius(4px);
+    }
+  }
+
+  button.upload {
+    margin-right: 20px;
+  }
+}
