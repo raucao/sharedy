@@ -86,6 +86,17 @@ body {
     top: 50%;
     position: absolute;
   }
+
+  input#file-picker {
+    background: #efefef;
+    position:absolute;
+    height:auto;
+    bottom:0;
+    top:0;
+    left:0;
+    right:0;
+    @include opacity(0);
+  }
 }
 
 #upload {

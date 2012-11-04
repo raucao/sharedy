@@ -64,6 +64,27 @@ $(function() {
 
     var files = e.dataTransfer.files;
 
+    loadFiles(files);
+  });
+
+  $('input#file-picker').bind('change', function(e) {
+    if (e.target.files.length == 0) {
+      return false
+    }
+    if (remoteStorage.getWidgetState() != "connected") {
+      $("#app-overlay").show();
+      return false;
+    }
+
+    $("#dropzone").hide();
+    $("#upload").show();
+
+    files = e.target.files;
+
+    loadFiles(files);
+  });
+
+  function loadFiles(files) {
     $.each(files, function(index, file) {
       if (!validateFileType(files[index].type)) {
         return;
@@ -89,8 +110,7 @@ $(function() {
       fileReaderBase64.readAsDataURL(file);
       fileReaderBinary.readAsArrayBuffer(file);
     });
-  });
-
+  }
 
   function validateFileType(fileType) {
     if (!fileType.match('image.*')) {
