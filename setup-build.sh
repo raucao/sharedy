@@ -1,6 +1,6 @@
-echo "build" >> .gitignore
-git add .gitignore
-git commit -m "Update gitignore config"
+# echo "build" >> .gitignore
+# git add .gitignore
+# git commit -m "Update gitignore config"
 git up
 git push origin master
 mkdir build

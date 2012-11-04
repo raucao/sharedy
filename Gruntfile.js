@@ -1,3 +1,5 @@
+var shelljs  = require('shelljs');
+
 module.exports = function( grunt ) {
   'use strict';
   //
@@ -185,5 +187,15 @@ module.exports = function( grunt ) {
 
   // Alias the `test` task to run the `mocha` task instead
   grunt.registerTask('test', 'server:phantom mocha');
+
+  grunt.registerTask('clean', 'Wipe the previous build dirs except their .git child dir', function() {
+    var dirs = [grunt.config('staging'), grunt.config('output')];
+    dirs.forEach(function(dir){
+      var files = shelljs.find(dir).filter(function(file) { return !file.match(/\.git(\/|$)/); });
+      files.shift();
+      shelljs.echo(files);
+      shelljs.rm('-rf', files);
+    });
+  });
 
 };
