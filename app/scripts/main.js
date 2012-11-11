@@ -21,6 +21,11 @@ $(function() {
     }
   });
 
+  if (remoteStorage.getWidgetState() != "connected") {
+    $("#app-overlay").show();
+    return false;
+  }
+
   //
   // App
   //
@@ -48,12 +53,6 @@ $(function() {
 
   $('#dropzone').bind('drop', function(e) {
     $(this).removeClass('active');
-
-    if (remoteStorage.getWidgetState() != "connected") {
-      $("#app-overlay").show();
-      return false;
-    }
-
     $("#dropzone").hide();
     $("#upload").show();
 
@@ -70,10 +69,6 @@ $(function() {
   $('input#file-picker').bind('change', function(e) {
     if (e.target.files.length == 0) {
       return false
-    }
-    if (remoteStorage.getWidgetState() != "connected") {
-      $("#app-overlay").show();
-      return false;
     }
 
     $("#dropzone").hide();
