@@ -77,24 +77,27 @@ body {
   }
 
   p.placeholder {
-    font-size: 50px;
-    line-height: 60px;
-    color: #eee;
+    background: url('/images/upload.svg') center top no-repeat;
+    font-size: 24px;
+    line-height: 30px;
+    color: #ccc;
     text-align: center;
     width: 100%;
-    margin: -40px auto 0 auto;
+    padding-top: 100px;
+    margin: -110px auto 0 auto;
     top: 50%;
     position: absolute;
   }
 
   input#file-picker {
     background: #efefef;
-    position:absolute;
-    height:auto;
-    bottom:0;
-    top:0;
-    left:0;
-    right:0;
+    position: absolute;
+    height: auto;
+    width: 100%;
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     @include opacity(0);
   }
 }
@@ -163,5 +166,15 @@ body {
 
   button.upload {
     margin-right: 20px;
+  }
+}
+
+#dropzone {
+  @media only screen and (min-width : 400px) {
+    p.placeholder {
+      br {
+        display: none;
+      }
+    }
   }
 }
