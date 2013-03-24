@@ -63,7 +63,7 @@
   <script src="scripts/vendor/spin.min.js"></script>
   <script src="scripts/vendor/jquery.spin.js"></script>
   <script src="scripts/vendor/moment.min.js"></script>
-  <script src="scripts/vendor/remoteStorage.js"></script>
+  <script src="scripts/vendor/remoteStorage.min.js"></script>
   <script src="scripts/remoteStorage-sharedy.js"></script>
   <script src="scripts/main.js"></script>
 
@@ -84,15 +84,19 @@
   <!-- endbuild -->
 
   <style>
-    #remotestorage-state {
+    #remotestorage-widget {
       top: 0;
-      right: 20px;
-      padding: 5px;
-      background: none;
+      z-index: 1000000;
     }
-    #remotestorage-questionmark {
-      color: #999;
-    }
+    /* #remotestorage-state { */
+    /*   top: 0; */
+    /*   right: 20px; */
+    /*   padding: 5px; */
+    /*   background: none; */
+    /* } */
+    /* #remotestorage-questionmark { */
+    /*   color: #999; */
+    /* } */
   </style>
 </body>
 </html>

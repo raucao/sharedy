@@ -10,34 +10,19 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
     },
 
     exports: {
-
-      // listUrls: function() {
-      //   var keys = privateClient.getListing('');
-      //   var urls = [];
-      //   keys.forEach(function(key) {
-      //     urls.push(privateClient.getObject(key).url);
-      //   });
-      //   return urls;
-      // },
-
-      // listBookmarks: function() {
-      //   var keys = privateClient.getListing('');
-      //   var bms = [];
-      //   keys.forEach(function(key) {
-      //     bms.push(privateClient.getObject(key));
-      //   });
-      //   privateClient.use('');
-      //   return bms;
-      // },
+      init: function() {
+        publicClient.release('');
+      },
 
       storeImage: function(mimeType, fileName, data, callback) {
         return publicClient.storeFile(
           mimeType,
           "images/" + encodeURIComponent(fileName),
           data,
-          callback
-        )
-
+          false
+        ).then(function(){
+          callback();
+        });
       },
 
       getImageUrl: function(fileName) {
