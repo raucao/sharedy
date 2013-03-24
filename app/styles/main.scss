@@ -28,6 +28,40 @@ body {
   }
 }
 
+div.history {
+  @include clearfix();
+  padding: 25px 0 75px 0;
+  h2 {
+    clear: both;
+    margin: 0 0 20px 25px;
+    font-size: 24px;
+    font-weight: normal
+  }
+  ul.images {
+    @include clearfix();
+    list-style: none;
+    padding-bottom: 30px;
+    li {
+      a {
+        width: 150px;
+        height: 150px;
+        background-position: center;
+        background-size: cover;
+        display: inline-block;
+        float: left;
+        margin-right: 15px;
+        &:hover {
+          @include box-shadow(rgba(0,0,0,0.5) 0 0 3px);
+        }
+      }
+    }
+  }
+}
+
+.template {
+  display: none;
+}
+
 #app-overlay {
   display: none;
   position:absolute;

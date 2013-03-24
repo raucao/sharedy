@@ -21,15 +21,20 @@
     <div class="navbar-inner">
       <a class="brand" href="#">Sharedy <span class="beta">&beta;</span></a>
       <ul class="nav">
-        <li class="active"><a href="#">Share</a></li>
+        <li data-nav-item="share">
+          <a href="#">Share</a>
+        </li>
         <li data-nav-item="history">
-          <a href="#" rel="tooltip" data-placement="bottom" title="coming soon">History</a>
+          <a href="#">History</a>
         </li>
       </ul>
     </div>
   </nav>
 
   <div id="container">
+  </div>
+
+  <div id="template-share" class="template">
     <p class="hint">Quickly share an image with the world:</p>
     <div id="dropzone">
       <p class="placeholder">Drop image files <br />or tap anywhere</p>
@@ -44,6 +49,9 @@
         <button class="btn cancel" type="button">cancel</button>
       </p>
     </div>
+  </div>
+  <div id="template-history" class="template">
+    <div class="history"></div>
   </div>
 
   <div id="app-overlay">

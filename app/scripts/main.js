@@ -1,5 +1,95 @@
-$(function() {
+var App = function () {
+  this.views = {};
+  this.helpers = {};
+};
 
+(function(jQuery) {
+  jQuery.eventEmitter = {
+    _JQInit: function() {
+      this._JQ = jQuery(this);
+    },
+    emit: function(evt, data) {
+      !this._JQ && this._JQInit();
+      this._JQ.trigger(evt, data);
+    },
+    once: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.one(evt, handler);
+    },
+    on: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.bind(evt, handler);
+    },
+    off: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.unbind(evt, handler);
+    }
+  };
+}(jQuery));
+jQuery.extend(App.prototype, jQuery.eventEmitter);
+
+var app = new App();
+
+app.views.show = function(viewName) {
+  var templateEl = $('#template-' + viewName);
+  $('#container').html(templateEl.html());
+  $('nav ul li').removeClass('active');
+  $('nav ul li[data-nav-item='+viewName+']').addClass('active');
+  app.emit('show-'+viewName);
+};
+
+app.on('show-history', function() {
+  app.loadHistory();
+});
+
+app.loadHistory = function () {
+  remoteStorage.sharedy.getListing('images/').then(function(listing) {
+    var items = listing.sort();
+    app.history = app.helpers.itemsByDay(items);
+    var days = Object.keys(app.history).sort().reverse();
+    days.forEach(function(day) {
+      app.helpers.renderHistoryDay(day);
+    });
+  });
+};
+
+app.helpers.itemsByDay = function (items) {
+  var days = {};
+  items.forEach(function(item){
+    var day = item.substr(0,6);
+    if (typeof(days[day]) === 'undefined') {
+      days[day] = [];
+    }
+    days[day].push(item);
+  });
+  return days;
+};
+
+app.helpers.renderHistoryDay = function (dayStr) {
+  var day = moment(dayStr, 'YYMMDD');
+  var date;
+  if (dayStr == moment().format('YYMMDD')) {
+    date = "Today";
+  } else if (dayStr == moment().subtract(1, 'days').format('YYMMDD')) {
+    date = "Yesterday";
+  } else {
+    date = day.format('MMM D, YYYY');
+  }
+  var template = $('<h2>'+date+'</h2><ul class="images day-'+dayStr+'"></ul>')
+  $('#container .history').append(template);
+  app.history[dayStr].forEach(function(item){
+    app.helpers.renderHistoryItem($('ul.day-'+dayStr), item);
+  });
+};
+
+app.helpers.renderHistoryItem = function (list, item) {
+  var imageUrl = remoteStorage.sharedy.getImageUrl(item);
+  var template = $('<li><a href="#" style="background-image: url('+imageUrl+');"></a></li>');
+  list.append(template);
+};
+
+$(function() {
+  app.views.show('share');
   $("#app-overlay").show();
 
   remoteStorage.claimAccess({sharedy: 'rw'}).then(function() {
@@ -19,10 +109,6 @@ $(function() {
           break;
       }
     });
-
-    //
-    // App
-    //
 
     jQuery.event.props.push('dataTransfer');
 
@@ -178,11 +264,13 @@ $(function() {
       return $(".image[data-filename='"+window.btoa(filename)+"']");
     }
 
-    //
-    // Misc
-    //
-
     $("[data-nav-item='history'] a").tooltip();
 
+    $('nav ul li a').on('click', function(){
+      listEl = $(this).parents('li');
+      viewName = listEl.data('nav-item');
+      app.views.show(viewName);
+      return false;
+    })
   });
 });

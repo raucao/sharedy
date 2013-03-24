@@ -1,7 +1,4 @@
 remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
-
-  // publicClient.sync('');
-
   return {
     name: "sharedy",
 
@@ -29,8 +26,9 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
         return publicClient.getItemURL(
           "images/" + encodeURIComponent(fileName)
         );
-      }
+      },
 
+      getListing: publicClient.getListing
     }
   };
 });
