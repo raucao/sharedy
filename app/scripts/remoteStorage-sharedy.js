@@ -11,10 +11,10 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
         publicClient.release('');
       },
 
-      storeImage: function(mimeType, fileName, data, callback) {
+      storeImage: function(mimeType, filename, data, callback) {
         return publicClient.storeFile(
           mimeType,
-          "images/" + encodeURIComponent(fileName),
+          "images/" + encodeURIComponent(filename),
           data,
           false
         ).then(function(){
@@ -22,13 +22,14 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
         });
       },
 
-      getImageUrl: function(fileName) {
+      getImageUrl: function(filename) {
         return publicClient.getItemURL(
-          "images/" + encodeURIComponent(fileName)
+          "images/" + encodeURIComponent(filename)
         );
       },
 
-      getListing: publicClient.getListing
+      getListing: publicClient.getListing,
+      remove: publicClient.remove
     }
   };
 });

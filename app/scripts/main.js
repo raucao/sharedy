@@ -38,7 +38,7 @@ app.views.show = function(viewName) {
   app.emit('show-'+viewName);
 };
 
-app.on('show-history', function() {
+app.on('show-history', function () {
   app.loadHistory();
 });
 
@@ -56,6 +56,14 @@ app.loadHistory = function () {
     var days = Object.keys(app.history).sort().reverse();
     days.forEach(function(day) {
       app.helpers.renderHistoryDay(day);
+    });
+
+    $("ul.images li a.delete").click(function(){
+      var listEl = $(this).parents('li');
+      var item = listEl.attr('data-item');
+      remoteStorage.sharedy.remove('images/'+item).then(function(){
+        listEl.remove();
+      });
     });
   });
 };
@@ -91,7 +99,9 @@ app.helpers.renderHistoryDay = function (dayStr) {
 
 app.helpers.renderHistoryItem = function (list, item) {
   var imageUrl = remoteStorage.sharedy.getImageUrl(item);
-  var template = $('<li><a href="#" style="background-image: url('+imageUrl+');"></a></li>');
+  var template = $('<li data-item="'+item+'"></li>');
+  template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
+  template.append('<a href="#" class="delete">delete</a>')
   list.append(template);
 };
 
