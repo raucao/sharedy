@@ -65,6 +65,8 @@ app.loadHistory = function () {
         listEl.remove();
       });
     });
+
+    $("ul.images li a.url").popover({html: true, placement: 'top'});
   });
 };
 
@@ -101,6 +103,9 @@ app.helpers.renderHistoryItem = function (list, item) {
   var imageUrl = remoteStorage.sharedy.getImageUrl(item);
   var template = $('<li data-item="'+item+'"></li>');
   template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
+  var urlLink = $('<a href="#" class="url">link</a>')
+  urlLink.attr('data-content', '<input type="text" value="'+remoteStorage.sharedy.getImageUrl(item)+'" />')
+  template.append(urlLink);
   template.append('<a href="#" class="delete">delete</a>')
   list.append(template);
 };
@@ -248,7 +253,7 @@ app.helpers.loadFiles = function (files) {
     fileReaderBase64.readAsDataURL(file);
     fileReaderBinary.readAsArrayBuffer(file);
   });
-}
+};
 
 $(function() {
   app.views.show('share');
