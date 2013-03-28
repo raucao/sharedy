@@ -145,7 +145,7 @@ app.helpers.initializeDragndrop = function () {
 
     var files = e.dataTransfer.files;
 
-    loadFiles(files);
+    app.helpers.loadFiles(files);
   });
 
   $('input#file-picker').bind('change', function(e) {
