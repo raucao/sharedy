@@ -66,7 +66,10 @@ app.loadHistory = function () {
       });
     });
 
-    $("ul.images li a.url").popover({html: true, placement: 'top'});
+    $("ul.images li a.url").clickover({
+      html: true, placement: 'top', onShown: function(){
+        $('.popover input').focus();
+      }});
   });
 };
 
@@ -100,9 +103,11 @@ app.helpers.renderHistoryDay = function (dayStr) {
 };
 
 app.helpers.renderHistoryItem = function (list, item) {
+  var time = moment(item.substring(7,11), "HHmmss").format("HH:mm");
   var imageUrl = remoteStorage.sharedy.getImageUrl(item);
   var template = $('<li data-item="'+item+'"></li>');
   template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
+  template.append('<span class=time>'+time+'</span>');
   var urlLink = $('<a href="#" class="url">link</a>')
   urlLink.attr('data-content', '<input type="text" value="'+remoteStorage.sharedy.getImageUrl(item)+'" />')
   template.append(urlLink);
