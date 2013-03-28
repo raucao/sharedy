@@ -64,6 +64,7 @@ app.loadHistory = function () {
       remoteStorage.sharedy.remove('images/'+item).then(function(){
         listEl.remove();
       });
+      return false;
     });
 
     $("ul.images li a.url").clickover({
