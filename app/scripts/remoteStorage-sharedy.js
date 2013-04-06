@@ -8,6 +8,7 @@ remoteStorage.defineModule("sharedy", function(privateClient, publicClient) {
 
     exports: {
       init: function() {
+        privateClient.release('');
         publicClient.release('');
       },
 
