@@ -30,6 +30,8 @@ jQuery.extend(App.prototype, jQuery.eventEmitter);
 
 var app = new App();
 
+var album;
+
 app.views.show = function(viewName) {
   var templateEl = $('#template-' + viewName);
   $('#container').html(templateEl.html());
@@ -50,7 +52,7 @@ app.on('show-share', function() {
 });
 
 app.loadHistory = function () {
-  remoteStorage.sharedy.getListing('images/').then(function(listing) {
+  album.list().then(function(listing) {
     var items = listing.sort();
     app.history = app.helpers.itemsByDay(items);
     var days = Object.keys(app.history).sort().reverse();
@@ -61,7 +63,7 @@ app.loadHistory = function () {
     $("ul.images li a.delete").click(function(){
       var listEl = $(this).parents('li');
       var item = listEl.attr('data-item');
-      remoteStorage.sharedy.remove('images/'+item).then(function(){
+      album.remove(item).then(function(){
         listEl.remove();
       });
       return false;
@@ -105,12 +107,12 @@ app.helpers.renderHistoryDay = function (dayStr) {
 
 app.helpers.renderHistoryItem = function (list, item) {
   var time = moment(item.substring(7,11), "HHmmss").format("HH:mm");
-  var imageUrl = remoteStorage.sharedy.getImageUrl(item);
+  var imageUrl = album.getPictureURL(item);
   var template = $('<li data-item="'+item+'"></li>');
   template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
   template.append('<span class=time>'+time+'</span>');
   var urlLink = $('<a href="#" class="url">link</a>')
-  urlLink.attr('data-content', '<input type="text" value="'+remoteStorage.sharedy.getImageUrl(item)+'" />')
+  urlLink.attr('data-content', '<input type="text" value="'+imageUrl+'" />')
   template.append(urlLink);
   template.append('<a href="#" class="delete">delete</a>')
   list.append(template);
@@ -182,14 +184,14 @@ app.helpers.uploadImages = function () {
     var timestamp = moment().format("YYMMDD-HHmmss-");
     var filename  = timestamp + file.name;
 
-    remoteStorage.sharedy.storeImage(
+    album.store(
       file.type,
       filename,
-      file.data,
-      function(){
+      file.data
+    ).then(function(pictureUrl){
         // success
         app.helpers.removeUploadIndicator(imgEl);
-        app.helpers.showImageUrl(imgEl, remoteStorage.sharedy.getImageUrl(filename));
+        app.helpers.showImageUrl(imgEl, pictureUrl);
         $("#upload button.upload").hide();
         // failure
         // $("#upload button.upload").removeAttr('disabled');
@@ -265,33 +267,26 @@ $(function() {
   app.views.show('share');
   $("#app-overlay").show();
 
-  remoteStorage.claimAccess({sharedy: 'rw'}).then(function() {
-    remoteStorage.sharedy.init();
-    remoteStorage.displayWidget('remotestorage-connect');
+  remoteStorage.claimAccess('pictures', 'rw');
+  remoteStorage.pictures.init();
+  remoteStorage.displayWidget('remotestorage-connect');
 
-    remoteStorage.onWidget("state", function(state){
-      switch (state) {
-        case "anonymous":
-          $("#app-overlay").show();
-          break;
-        case "typing":
-          $("#app-overlay .hint").hide();
-          break;
-        case "connected":
-          $("#app-overlay").hide();
-          break;
-      }
-    });
+  album = remoteStorage.pictures.openPublicAlbum('Sharedy');
 
-    jQuery.event.props.push('dataTransfer');
+  $("#app-overlay").show();
 
-    $("[data-nav-item='history'] a").tooltip();
-
-    $('nav ul li a').on('click', function(){
-      listEl = $(this).parents('li');
-      viewName = listEl.data('nav-item');
-      app.views.show(viewName);
-      return false;
-    })
+  remoteStorage.on("ready", function(state){
+    $("#app-overlay").hide();
   });
+
+  jQuery.event.props.push('dataTransfer');
+
+  $("[data-nav-item='history'] a").tooltip();
+
+  $('nav ul li a').on('click', function(){
+    listEl = $(this).parents('li');
+    viewName = listEl.data('nav-item');
+    app.views.show(viewName);
+    return false;
+  })
 });
