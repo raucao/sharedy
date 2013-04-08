@@ -1,3 +1,5 @@
+"use strict";
+
 var App = function () {
   this.views = {};
   this.helpers = {};
@@ -8,29 +10,27 @@ var App = function () {
     _JQInit: function() {
       this._JQ = jQuery(this);
     },
-    emit: function(evt, data) {
-      !this._JQ && this._JQInit();
-      this._JQ.trigger(evt, data);
-    },
-    once: function(evt, handler) {
-      !this._JQ && this._JQInit();
-      this._JQ.one(evt, handler);
-    },
-    on: function(evt, handler) {
-      !this._JQ && this._JQInit();
-      this._JQ.bind(evt, handler);
-    },
-    off: function(evt, handler) {
-      !this._JQ && this._JQInit();
-      this._JQ.unbind(evt, handler);
-    }
+  emit: function(evt, data) {
+    !this._JQ && this._JQInit();
+    this._JQ.trigger(evt, data);
+  },
+  once: function(evt, handler) {
+    !this._JQ && this._JQInit();
+    this._JQ.one(evt, handler);
+  },
+  on: function(evt, handler) {
+    !this._JQ && this._JQInit();
+    this._JQ.bind(evt, handler);
+  },
+  off: function(evt, handler) {
+    !this._JQ && this._JQInit();
+    this._JQ.unbind(evt, handler);
+  }
   };
 }(jQuery));
 jQuery.extend(App.prototype, jQuery.eventEmitter);
 
 var app = new App();
-
-var album;
 
 app.views.show = function(viewName) {
   var templateEl = $('#template-' + viewName);
@@ -52,7 +52,7 @@ app.on('show-share', function() {
 });
 
 app.loadHistory = function () {
-  album.list().then(function(listing) {
+  app.album.list().then(function(listing) {
     var items = listing.sort();
     app.history = app.helpers.itemsByDay(items);
     var days = Object.keys(app.history).sort().reverse();
@@ -63,7 +63,7 @@ app.loadHistory = function () {
     $("ul.images li a.delete").click(function(){
       var listEl = $(this).parents('li');
       var item = listEl.attr('data-item');
-      album.remove(item).then(function(){
+      app.album.remove(item).then(function(){
         listEl.remove();
       });
       return false;
@@ -98,7 +98,7 @@ app.helpers.renderHistoryDay = function (dayStr) {
   } else {
     date = day.format('MMM D, YYYY');
   }
-  var template = $('<h2>'+date+'</h2><ul class="images day-'+dayStr+'"></ul>')
+  var template = $('<h2>'+date+'</h2><ul class="images day-'+dayStr+'"></ul>');
   $('#container .history').append(template);
   app.history[dayStr].forEach(function(item){
     app.helpers.renderHistoryItem($('ul.day-'+dayStr), item);
@@ -107,14 +107,14 @@ app.helpers.renderHistoryDay = function (dayStr) {
 
 app.helpers.renderHistoryItem = function (list, item) {
   var time = moment(item.substring(7,11), "HHmmss").format("HH:mm");
-  var imageUrl = album.getPictureURL(item);
+  var imageUrl = app.album.getPictureURL(item);
   var template = $('<li data-item="'+item+'"></li>');
   template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
   template.append('<span class=time>'+time+'</span>');
-  var urlLink = $('<a href="#" class="url">link</a>')
-  urlLink.attr('data-content', '<input type="text" value="'+imageUrl+'" />')
+  var urlLink = $('<a href="#" class="url">link</a>');
+  urlLink.attr('data-content', '<input type="text" value="'+imageUrl+'" />');
   template.append(urlLink);
-  template.append('<a href="#" class="delete">delete</a>')
+  template.append('<a href="#" class="delete">delete</a>');
   list.append(template);
 };
 
@@ -159,9 +159,7 @@ app.helpers.initializeDragndrop = function () {
     $("#dropzone").hide();
     $("#upload").show();
 
-    files = e.target.files;
-
-    app.helpers.loadFiles(files);
+    app.helpers.loadFiles(e.target.files);
   });
 };
 
@@ -184,7 +182,7 @@ app.helpers.uploadImages = function () {
     var timestamp = moment().format("YYMMDD-HHmmss-");
     var filename  = timestamp + file.name;
 
-    album.store(
+    app.album.store(
       file.type,
       filename,
       file.data
@@ -271,7 +269,7 @@ $(function() {
   remoteStorage.pictures.init();
   remoteStorage.displayWidget('remotestorage-connect');
 
-  album = remoteStorage.pictures.openPublicAlbum('Sharedy');
+  app.album = remoteStorage.pictures.openPublicAlbum('Sharedy');
 
   $("#app-overlay").show();
 
@@ -284,8 +282,8 @@ $(function() {
   $("[data-nav-item='history'] a").tooltip();
 
   $('nav ul li a').on('click', function(){
-    listEl = $(this).parents('li');
-    viewName = listEl.data('nav-item');
+    var listEl = $(this).parents('li');
+    var viewName = listEl.data('nav-item');
     app.views.show(viewName);
     return false;
   })
