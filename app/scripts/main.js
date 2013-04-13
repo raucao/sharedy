@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var App = function () {
   this.views = {};
@@ -10,22 +10,22 @@ var App = function () {
     _JQInit: function() {
       this._JQ = jQuery(this);
     },
-  emit: function(evt, data) {
-    !this._JQ && this._JQInit();
-    this._JQ.trigger(evt, data);
-  },
-  once: function(evt, handler) {
-    !this._JQ && this._JQInit();
-    this._JQ.one(evt, handler);
-  },
-  on: function(evt, handler) {
-    !this._JQ && this._JQInit();
-    this._JQ.bind(evt, handler);
-  },
-  off: function(evt, handler) {
-    !this._JQ && this._JQInit();
-    this._JQ.unbind(evt, handler);
-  }
+    emit: function(evt, data) {
+      // !this._JQ && this._JQInit();
+      this._JQ.trigger(evt, data);
+    },
+    once: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.one(evt, handler);
+    },
+    on: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.bind(evt, handler);
+    },
+    off: function(evt, handler) {
+      !this._JQ && this._JQInit();
+      this._JQ.unbind(evt, handler);
+    }
   };
 }(jQuery));
 jQuery.extend(App.prototype, jQuery.eventEmitter);
@@ -46,8 +46,8 @@ app.on('show-history', function () {
 
 app.on('show-share', function() {
   app.imageFiles = [];
-  $("#upload button.cancel").click(app.helpers.cancelSharing);
-  $("#upload button.upload").click(app.helpers.uploadImages);
+  $('#upload button.cancel').click(app.helpers.cancelSharing);
+  $('#upload button.upload').click(app.helpers.uploadImages);
   app.helpers.initializeDragndrop();
 });
 
@@ -60,7 +60,7 @@ app.loadHistory = function () {
       app.helpers.renderHistoryDay(day);
     });
 
-    $("ul.images li a.delete").click(function(){
+    $('ul.images li a.delete').click(function(){
       var listEl = $(this).parents('li');
       var item = listEl.attr('data-item');
       app.album.remove(item).then(function(){
@@ -70,9 +70,12 @@ app.loadHistory = function () {
     });
 
     $("ul.images li a.url").clickover({
-      html: true, placement: 'top', onShown: function(){
+      html: true,
+      placement: 'top',
+      onShown: function(){
         $('.popover input').focus();
-      }});
+      }
+    });
   });
 };
 
@@ -91,9 +94,9 @@ app.helpers.itemsByDay = function (items) {
 app.helpers.renderHistoryDay = function (dayStr) {
   var day = moment(dayStr, 'YYMMDD');
   var date;
-  if (dayStr == moment().format('YYMMDD')) {
+  if (dayStr === moment().format('YYMMDD')) {
     date = "Today";
-  } else if (dayStr == moment().subtract(1, 'days').format('YYMMDD')) {
+  } else if (dayStr === moment().subtract(1, 'days').format('YYMMDD')) {
     date = "Yesterday";
   } else {
     date = day.format('MMM D, YYYY');
@@ -152,8 +155,8 @@ app.helpers.initializeDragndrop = function () {
   });
 
   $('input#file-picker').bind('change', function(e) {
-    if (e.target.files.length == 0) {
-      return false
+    if (e.target.files.length === 0) {
+      return false;
     }
 
     $("#dropzone").hide();
@@ -168,18 +171,18 @@ app.helpers.cancelSharing = function () {
   $('#dropzone').show();
   $("p.placeholder").show();
   $('#dropped-files > div.image').remove();
-  $("#upload button.upload").removeAttr('disabled').show();
-  $("#upload button.cancel").html('cancel');
+  $('#upload button.upload').removeAttr('disabled').show();
+  $('#upload button.cancel').html('cancel');
 
   app.imageFiles = [];
 
   return false;
-}
+};
 
 app.helpers.uploadImages = function () {
   $.each(app.imageFiles, function(index, file){
-    var imgEl = $(".image[data-filename='"+window.btoa(file.name)+"']");
-    var timestamp = moment().format("YYMMDD-HHmmss-");
+    var imgEl = $('.image[data-filename='+window.btoa(file.name)+']');
+    var timestamp = moment().format('YYMMDD-HHmmss-');
     var filename  = timestamp + file.name;
 
     app.album.store(
@@ -190,27 +193,27 @@ app.helpers.uploadImages = function () {
         // success
         app.helpers.removeUploadIndicator(imgEl);
         app.helpers.showImageUrl(imgEl, pictureUrl);
-        $("#upload button.upload").hide();
+        $('#upload button.upload').hide();
         // failure
         // $("#upload button.upload").removeAttr('disabled');
       }
     );
 
     app.helpers.showUploadIndicator(imgEl);
-    $("#upload button.upload").attr('disabled', 'disabled');
-    $("#upload button.cancel").html('Back');
+    $('#upload button.upload').attr('disabled', 'disabled');
+    $('#upload button.cancel').html('Back');
   });
-}
+};
 
 app.helpers.showUploadIndicator = function (element) {
   var html = '<div class="overlay loading"></div>';
   $(element).append($(html));
   $(element).find('.overlay.loading').spin('large', 'white');
-}
+};
 
 app.helpers.removeUploadIndicator = function (element) {
   $(element).find('.overlay.loading').remove();
-}
+};
 
 app.helpers.showImageUrl = function (element, url) {
   var html = '\
@@ -220,18 +223,18 @@ app.helpers.showImageUrl = function (element, url) {
     </div>';
 
   $(element).append($(html));
-}
+};
 
 app.helpers.validateFileType = function (fileType) {
   if (!fileType.match('image.*')) {
     alert('Hey! Images only');
-    $("p.placeholder").show();
+    $('p.placeholder').show();
     return false;
   }
   else {
     return true;
   }
-}
+};
 
 app.helpers.loadFiles = function (files) {
   $.each(files, function(index, file) {
@@ -245,7 +248,7 @@ app.helpers.loadFiles = function (files) {
     fileReaderBase64.onload = (function(file) {
       return function(e) {
         var html = '<div class="image" data-filename='+window.btoa(file.name)+'>';
-            html += '<img src='+this.result+'></div>';
+        html += '<img src='+this.result+'></div>';
         $('#dropped-files').append(html);
       };
     })(files[index]);
@@ -263,7 +266,7 @@ app.helpers.loadFiles = function (files) {
 
 $(function() {
   app.views.show('share');
-  $("#app-overlay").show();
+  $('#app-overlay').show();
 
   remoteStorage.claimAccess('pictures', 'rw');
   remoteStorage.pictures.init();
@@ -271,20 +274,20 @@ $(function() {
 
   app.album = remoteStorage.pictures.openPublicAlbum('Sharedy');
 
-  $("#app-overlay").show();
+  $('#app-overlay').show();
 
-  remoteStorage.on("ready", function(state){
-    $("#app-overlay").hide();
+  remoteStorage.on('ready', function(state){
+    $('#app-overlay').hide();
   });
 
   jQuery.event.props.push('dataTransfer');
 
-  $("[data-nav-item='history'] a").tooltip();
+  $('[data-nav-item=history] a').tooltip();
 
   $('nav ul li a').on('click', function(){
     var listEl = $(this).parents('li');
     var viewName = listEl.data('nav-item');
     app.views.show(viewName);
     return false;
-  })
+  });
 });
