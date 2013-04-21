@@ -181,7 +181,7 @@ app.helpers.cancelSharing = function () {
 
 app.helpers.uploadImages = function () {
   $.each(app.imageFiles, function(index, file){
-    var imgEl = $('.image[data-filename='+window.btoa(file.name)+']');
+    var imgEl = $('.image[data-filename="'+window.btoa(file.name)+'"]');
     var timestamp = moment().format('YYMMDD-HHmmss-');
     var filename  = timestamp + file.name;
 
