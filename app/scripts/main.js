@@ -282,8 +282,6 @@ $(function() {
 
   jQuery.event.props.push('dataTransfer');
 
-  $('[data-nav-item=history] a').tooltip();
-
   $('nav ul li a').on('click', function(){
     var listEl = $(this).parents('li');
     var viewName = listEl.data('nav-item');
