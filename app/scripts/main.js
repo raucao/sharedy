@@ -76,6 +76,12 @@ app.loadHistory = function () {
         $('.popover input').focus();
       }
     });
+
+    $('ul.images li a.img').click(function(){
+      var item = $(this).parents('li').attr('data-item');
+      $('.modal[data-item="'+item+'"]').modal();
+      return false;
+    });
   });
 };
 
@@ -111,6 +117,7 @@ app.helpers.renderHistoryDay = function (dayStr) {
 app.helpers.renderHistoryItem = function (list, item) {
   var time = moment(item.substring(7,11), "HHmmss").format("HH:mm");
   var imageUrl = app.album.getPictureURL(item);
+
   var template = $('<li data-item="'+item+'"></li>');
   template.append('<a class="img" href="#" style="background-image: url('+imageUrl+');"></a>');
   template.append('<span class=time>'+time+'</span>');
@@ -119,6 +126,13 @@ app.helpers.renderHistoryItem = function (list, item) {
   template.append(urlLink);
   template.append('<a href="#" class="delete">delete</a>');
   list.append(template);
+
+  var modalTemplate = $('<div data-item="'+item+'" class="modal hide fade" aria-hidden="true">'
+    // + '<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button><h3 id="modal-"'+item+'-label">'+item+'</h3></div>'
+    + '<div class="modal-body"><img src="'+imageUrl+'" style="max-width: 530px;"/></div>'
+    + '<div class="modal-footer"><button class="btn" data-dismiss="modal" aria-hidden="true">Close</button></div>'
+    + '</div>');
+  $('body').append(modalTemplate);
 };
 
 app.helpers.initializeDragndrop = function () {
